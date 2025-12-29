@@ -1492,8 +1492,6 @@ const Auth = {
     }
     
     return client;
-    };
-    return mockData[clientId] || mockData['demo-001'];
   }
 };
 

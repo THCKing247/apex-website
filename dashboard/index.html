@@ -106,34 +106,36 @@
 
       <!-- Billing Tab -->
       <div class="dashboard-tab-content" id="tab-billing">
-        <!-- Billing Summary -->
+        <!-- Current Bill Overview -->
         <section class="reveal" style="margin:32px 0;">
-          <div class="billing-summary-card" id="billing-summary-tab">
-            <!-- Billing summary will be populated by JavaScript -->
+          <div class="section-head">
+            <h2>Current Bill</h2>
+            <p>Your billing summary and upcoming charges.</p>
+          </div>
+          <div id="billing-current-bill">
+            <!-- Current bill details will be populated by JavaScript -->
           </div>
         </section>
 
-        <!-- Your Assets/Products -->
+        <!-- Billing History -->
         <section class="reveal" style="margin:48px 0;">
           <div class="section-head">
-            <h2>Your Assets</h2>
-            <p>Access and manage your products and services.</p>
+            <h2>Billing History</h2>
+            <p>View your past invoices and payment history.</p>
           </div>
-
-          <div class="assets-grid" id="assets-container-tab">
-            <!-- Assets will be populated by JavaScript -->
+          <div id="billing-history">
+            <!-- Billing history will be populated by JavaScript -->
           </div>
         </section>
 
-        <!-- Available Products (Upsell) -->
+        <!-- Payment Information -->
         <section class="reveal" style="margin:48px 0;">
           <div class="section-head">
-            <h2>Available Products</h2>
-            <p>Explore additional products and services to enhance your business.</p>
+            <h2>Payment Information</h2>
+            <p>Manage your payment methods and billing address.</p>
           </div>
-
-          <div class="products-grid" id="products-container-tab">
-            <!-- Products will be populated by JavaScript -->
+          <div id="payment-info">
+            <!-- Payment information will be populated by JavaScript -->
           </div>
         </section>
       </div>

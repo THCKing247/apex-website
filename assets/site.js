@@ -1287,7 +1287,55 @@ const Auth = {
           basePrice: 99,
           overageMessages: 247,
           overageCost: 24.70,
-          nextBillingDate: '2024-04-01'
+          nextBillingDate: '2024-04-01',
+          paymentMethod: {
+            type: 'card',
+            last4: '4242',
+            brand: 'Visa',
+            expiryMonth: 12,
+            expiryYear: 2025,
+            name: 'Demo Client'
+          },
+          billingAddress: {
+            line1: '123 Business St',
+            line2: 'Suite 100',
+            city: 'New York',
+            state: 'NY',
+            zip: '10001',
+            country: 'United States'
+          },
+          billingHistory: [
+            {
+              id: 'inv-003',
+              date: '2024-03-01',
+              amount: 112.30,
+              status: 'paid',
+              basePrice: 99,
+              overageCost: 13.30,
+              overageMessages: 133,
+              invoiceUrl: '#'
+            },
+            {
+              id: 'inv-002',
+              date: '2024-02-01',
+              amount: 99.00,
+              status: 'paid',
+              basePrice: 99,
+              overageCost: 0,
+              overageMessages: 0,
+              invoiceUrl: '#'
+            },
+            {
+              id: 'inv-001',
+              date: '2024-01-01',
+              amount: 108.50,
+              status: 'paid',
+              basePrice: 99,
+              overageCost: 9.50,
+              overageMessages: 95,
+              invoiceUrl: '#'
+            }
+          ]
         },
         chatSessions: [
           {
@@ -1471,7 +1519,44 @@ const Auth = {
           basePrice: 49,
           overageMessages: 0,
           overageCost: 0,
-          nextBillingDate: '2024-04-01'
+          nextBillingDate: '2024-04-01',
+          paymentMethod: {
+            type: 'card',
+            last4: '8888',
+            brand: 'Mastercard',
+            expiryMonth: 6,
+            expiryYear: 2026,
+            name: 'John Smith'
+          },
+          billingAddress: {
+            line1: '456 Main Ave',
+            city: 'Los Angeles',
+            state: 'CA',
+            zip: '90001',
+            country: 'United States'
+          },
+          billingHistory: [
+            {
+              id: 'inv-006',
+              date: '2024-03-01',
+              amount: 49.00,
+              status: 'paid',
+              basePrice: 49,
+              overageCost: 0,
+              overageMessages: 0,
+              invoiceUrl: '#'
+            },
+            {
+              id: 'inv-005',
+              date: '2024-02-01',
+              amount: 49.00,
+              status: 'paid',
+              basePrice: 49,
+              overageCost: 0,
+              overageMessages: 0,
+              invoiceUrl: '#'
+            }
+          ]
         },
         chatSessions: [
           {
@@ -1576,7 +1661,30 @@ const Auth = {
       client.usage = { currentMonth: 0, lastMonth: 0, totalMessages: 0, totalSessions: 0, averageResponseTime: 0, satisfaction: 0 };
     }
     if (!client.billing) {
-      client.billing = { currentBill: client.plan.price, basePrice: client.plan.price, overageMessages: 0, overageCost: 0, nextBillingDate: new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0] };
+      client.billing = { 
+        currentBill: client.plan.price, 
+        basePrice: client.plan.price, 
+        overageMessages: 0, 
+        overageCost: 0, 
+        nextBillingDate: new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0],
+        paymentMethod: {
+          type: 'card',
+          last4: '0000',
+          brand: 'Visa',
+          expiryMonth: 12,
+          expiryYear: new Date().getFullYear() + 1,
+          name: client.name || 'Client'
+        },
+        billingAddress: {
+          line1: '',
+          line2: '',
+          city: '',
+          state: '',
+          zip: '',
+          country: 'United States'
+        },
+        billingHistory: []
+      };
     }
     if (!client.chatSessions) {
       client.chatSessions = [];
@@ -1775,7 +1883,7 @@ function initDashboard() {
   // Render available products (overview tab)
   renderAvailableProducts(clientData);
   
-  // Render billing tab content (same as overview)
+  // Render billing tab content (detailed billing)
   renderBillingTabContent(clientData);
 }
 
@@ -2098,6 +2206,337 @@ function renderAvailableProducts(clientData) {
       </div>
     `;
   }).join('');
+}
+
+// Render billing tab content (detailed billing)
+function renderBillingTabContent(clientData) {
+  // Render current bill
+  renderCurrentBill(clientData);
+  
+  // Render billing history
+  renderBillingHistory(clientData);
+  
+  // Render payment information
+  renderPaymentInfo(clientData);
+}
+
+// Render current bill details
+function renderCurrentBill(clientData) {
+  const container = document.getElementById('billing-current-bill');
+  if (!container || !clientData.billing || !clientData.plan) return;
+  
+  const billing = clientData.billing;
+  const plan = clientData.plan;
+  const usage = clientData.usage || { currentMonth: 0 };
+  const usagePercent = ((usage.currentMonth / plan.monthlyLimit) * 100).toFixed(1);
+  const isOverLimit = usage.currentMonth > plan.monthlyLimit;
+  const remainingMessages = Math.max(0, plan.monthlyLimit - usage.currentMonth);
+  
+  container.innerHTML = `
+    <div class="billing-detail-card">
+      <div class="billing-detail-grid">
+        <div class="billing-detail-section">
+          <h3 style="margin:0 0 16px;font-size:20px;">Plan Details</h3>
+          <div class="billing-detail-row">
+            <span class="billing-detail-label">Plan Name:</span>
+            <span class="billing-detail-value">${plan.name}</span>
+          </div>
+          <div class="billing-detail-row">
+            <span class="billing-detail-label">Monthly Limit:</span>
+            <span class="billing-detail-value">${plan.monthlyLimit.toLocaleString()} messages</span>
+          </div>
+          <div class="billing-detail-row">
+            <span class="billing-detail-label">Base Price:</span>
+            <span class="billing-detail-value">$${plan.price.toFixed(2)}/month</span>
+          </div>
+          <div class="billing-detail-row">
+            <span class="billing-detail-label">Overage Rate:</span>
+            <span class="billing-detail-value">$${plan.overageRate.toFixed(2)} per message</span>
+          </div>
+        </div>
+        
+        <div class="billing-detail-section">
+          <h3 style="margin:0 0 16px;font-size:20px;">Current Usage</h3>
+          <div class="billing-detail-row">
+            <span class="billing-detail-label">Messages Used:</span>
+            <span class="billing-detail-value ${isOverLimit ? 'over-limit' : ''}">
+              ${usage.currentMonth.toLocaleString()} / ${plan.monthlyLimit.toLocaleString()} (${usagePercent}%)
+            </span>
+          </div>
+          <div class="billing-detail-row">
+            <span class="billing-detail-label">Remaining:</span>
+            <span class="billing-detail-value">${remainingMessages.toLocaleString()} messages</span>
+          </div>
+          ${isOverLimit ? `
+            <div class="billing-detail-row">
+              <span class="billing-detail-label">Overage Messages:</span>
+              <span class="billing-detail-value over-limit">${billing.overageMessages.toLocaleString()}</span>
+            </div>
+          ` : ''}
+          <div class="billing-detail-row">
+            <span class="billing-detail-label">Next Billing Date:</span>
+            <span class="billing-detail-value">${new Date(billing.nextBillingDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="billing-breakdown-section">
+        <h3 style="margin:0 0 16px;font-size:20px;">Current Bill Breakdown</h3>
+        <div class="billing-breakdown">
+          <div class="billing-line">
+            <span>Base Plan (${plan.name})</span>
+            <span>$${billing.basePrice.toFixed(2)}</span>
+          </div>
+          ${isOverLimit ? `
+            <div class="billing-line">
+              <span>Overage (${billing.overageMessages.toLocaleString()} messages × $${plan.overageRate.toFixed(2)})</span>
+              <span class="overage-cost">$${billing.overageCost.toFixed(2)}</span>
+            </div>
+          ` : ''}
+          <div class="billing-line billing-total">
+            <span><strong>Total Due</strong></span>
+            <span><strong>$${billing.currentBill.toFixed(2)}</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Render billing history
+function renderBillingHistory(clientData) {
+  const container = document.getElementById('billing-history');
+  if (!container || !clientData.billing) return;
+  
+  const history = clientData.billing.billingHistory || [];
+  
+  if (history.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">📄</div>
+        <h3 style="margin:16px 0 8px;font-size:20px;">No Billing History</h3>
+        <p style="margin:0;color:var(--muted);">Your billing history will appear here once you have invoices.</p>
+      </div>
+    `;
+    return;
+  }
+  
+  container.innerHTML = `
+    <div class="billing-history-table">
+      <table class="billing-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Invoice #</th>
+            <th>Base Plan</th>
+            <th>Overage</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${history.map(invoice => `
+            <tr>
+              <td>${new Date(invoice.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+              <td><code style="background:rgba(124,58,237,.1);padding:4px 8px;border-radius:4px;font-size:12px;">${invoice.id}</code></td>
+              <td>$${invoice.basePrice.toFixed(2)}</td>
+              <td>${invoice.overageCost > 0 ? `$${invoice.overageCost.toFixed(2)}` : '-'}</td>
+              <td><strong>$${invoice.amount.toFixed(2)}</strong></td>
+              <td><span class="status-badge ${invoice.status}">${invoice.status === 'paid' ? 'Paid' : invoice.status === 'pending' ? 'Pending' : 'Failed'}</span></td>
+              <td><a href="${invoice.invoiceUrl}" class="invoice-link">View →</a></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+// Render payment information
+function renderPaymentInfo(clientData) {
+  const container = document.getElementById('payment-info');
+  if (!container || !clientData.billing) return;
+  
+  const paymentMethod = clientData.billing.paymentMethod || {};
+  const billingAddress = clientData.billing.billingAddress || {};
+  
+  container.innerHTML = `
+    <div class="payment-info-container">
+      <div class="payment-method-section">
+        <h3 style="margin:0 0 20px;font-size:20px;">Payment Method</h3>
+        <div class="current-payment-method">
+          <div class="payment-method-card">
+            <div class="payment-method-icon">💳</div>
+            <div class="payment-method-details">
+              <div class="payment-method-brand">${paymentMethod.brand || 'Card'} •••• ${paymentMethod.last4 || '0000'}</div>
+              <div class="payment-method-name">${paymentMethod.name || 'Cardholder Name'}</div>
+              <div class="payment-method-expiry">Expires ${String(paymentMethod.expiryMonth || 12).padStart(2, '0')}/${paymentMethod.expiryYear || new Date().getFullYear()}</div>
+            </div>
+          </div>
+          <button class="btn" onclick="showPaymentForm()" style="margin-top:16px;">Update Payment Method</button>
+        </div>
+        
+        <div class="payment-form" id="payment-form" style="display:none;margin-top:24px;">
+          <form id="updatePaymentForm" onsubmit="updatePaymentMethod(event)">
+            <div class="form-group">
+              <label for="card-number">Card Number <span class="required">*</span></label>
+              <input type="text" id="card-number" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="expiry-month">Expiry Month <span class="required">*</span></label>
+                <select id="expiry-month" name="expiryMonth" required>
+                  ${Array.from({length: 12}, (_, i) => `<option value="${i + 1}">${String(i + 1).padStart(2, '0')}</option>`).join('')}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="expiry-year">Expiry Year <span class="required">*</span></label>
+                <select id="expiry-year" name="expiryYear" required>
+                  ${Array.from({length: 10}, (_, i) => {
+                    const year = new Date().getFullYear() + i;
+                    return `<option value="${year}">${year}</option>`;
+                  }).join('')}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="cvv">CVV <span class="required">*</span></label>
+                <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="card-name">Cardholder Name <span class="required">*</span></label>
+              <input type="text" id="card-name" name="cardName" placeholder="John Doe" required>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn primary">Save Payment Method</button>
+              <button type="button" class="btn" onclick="hidePaymentForm()">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <div class="billing-address-section">
+        <h3 style="margin:0 0 20px;font-size:20px;">Billing Address</h3>
+        <div class="current-billing-address">
+          <div class="billing-address-display">
+            ${billingAddress.line1 ? `
+              <p style="margin:0 0 4px;">${billingAddress.line1}</p>
+              ${billingAddress.line2 ? `<p style="margin:0 0 4px;">${billingAddress.line2}</p>` : ''}
+              <p style="margin:0 0 4px;">${billingAddress.city}, ${billingAddress.state} ${billingAddress.zip}</p>
+              <p style="margin:0;">${billingAddress.country}</p>
+            ` : '<p style="margin:0;color:var(--muted);">No billing address on file</p>'}
+          </div>
+          <button class="btn" onclick="showAddressForm()" style="margin-top:16px;">Update Billing Address</button>
+        </div>
+        
+        <div class="address-form" id="address-form" style="display:none;margin-top:24px;">
+          <form id="updateAddressForm" onsubmit="updateBillingAddress(event)">
+            <div class="form-group">
+              <label for="address-line1">Address Line 1 <span class="required">*</span></label>
+              <input type="text" id="address-line1" name="line1" placeholder="123 Main St" value="${billingAddress.line1 || ''}" required>
+            </div>
+            <div class="form-group">
+              <label for="address-line2">Address Line 2</label>
+              <input type="text" id="address-line2" name="line2" placeholder="Suite 100" value="${billingAddress.line2 || ''}">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="address-city">City <span class="required">*</span></label>
+                <input type="text" id="address-city" name="city" placeholder="New York" value="${billingAddress.city || ''}" required>
+              </div>
+              <div class="form-group">
+                <label for="address-state">State <span class="required">*</span></label>
+                <input type="text" id="address-state" name="state" placeholder="NY" value="${billingAddress.state || ''}" required>
+              </div>
+              <div class="form-group">
+                <label for="address-zip">ZIP Code <span class="required">*</span></label>
+                <input type="text" id="address-zip" name="zip" placeholder="10001" value="${billingAddress.zip || ''}" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="address-country">Country <span class="required">*</span></label>
+              <input type="text" id="address-country" name="country" placeholder="United States" value="${billingAddress.country || 'United States'}" required>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn primary">Save Address</button>
+              <button type="button" class="btn" onclick="hideAddressForm()">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Payment form functions
+function showPaymentForm() {
+  const form = document.getElementById('payment-form');
+  if (form) form.style.display = 'block';
+}
+
+function hidePaymentForm() {
+  const form = document.getElementById('payment-form');
+  if (form) form.style.display = 'none';
+  const updateForm = document.getElementById('updatePaymentForm');
+  if (updateForm) updateForm.reset();
+}
+
+function showAddressForm() {
+  const form = document.getElementById('address-form');
+  if (form) form.style.display = 'block';
+}
+
+function hideAddressForm() {
+  const form = document.getElementById('address-form');
+  if (form) form.style.display = 'none';
+  const updateForm = document.getElementById('updateAddressForm');
+  if (updateForm) updateForm.reset();
+}
+
+function updatePaymentMethod(event) {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const cardNumber = formData.get('cardNumber').replace(/\s/g, '');
+  const last4 = cardNumber.slice(-4);
+  
+  // In production, this would make an API call
+  alert(`Payment method updated successfully!\nCard ending in ${last4} has been saved.`);
+  hidePaymentForm();
+  
+  // Reload the payment info section
+  const clientData = Auth.getClientData(Auth.getSession().clientId);
+  if (clientData.billing && clientData.billing.paymentMethod) {
+    clientData.billing.paymentMethod.last4 = last4;
+    clientData.billing.paymentMethod.expiryMonth = parseInt(formData.get('expiryMonth'));
+    clientData.billing.paymentMethod.expiryYear = parseInt(formData.get('expiryYear'));
+    clientData.billing.paymentMethod.name = formData.get('cardName');
+  }
+  renderPaymentInfo(clientData);
+}
+
+function updateBillingAddress(event) {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  
+  // In production, this would make an API call
+  alert('Billing address updated successfully!');
+  hideAddressForm();
+  
+  // Reload the payment info section
+  const clientData = Auth.getClientData(Auth.getSession().clientId);
+  if (clientData.billing && !clientData.billing.billingAddress) {
+    clientData.billing.billingAddress = {};
+  }
+  if (clientData.billing && clientData.billing.billingAddress) {
+    clientData.billing.billingAddress.line1 = formData.get('line1');
+    clientData.billing.billingAddress.line2 = formData.get('line2');
+    clientData.billing.billingAddress.city = formData.get('city');
+    clientData.billing.billingAddress.state = formData.get('state');
+    clientData.billing.billingAddress.zip = formData.get('zip');
+    clientData.billing.billingAddress.country = formData.get('country');
+  }
+  renderPaymentInfo(clientData);
 }
 
 // Render billing information

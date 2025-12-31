@@ -1766,23 +1766,17 @@ function initDashboard() {
   // Initialize tabs
   initDashboardTabs();
   
-  // Render billing summary
+  // Render billing summary (overview tab)
   renderBillingSummary(clientData);
   
-  // Render assets
+  // Render assets (overview tab)
   renderAssets(clientData);
   
-  // Render available products
+  // Render available products (overview tab)
   renderAvailableProducts(clientData);
   
-  // Render chat sessions
-  renderChatSessions(clientData);
-  
-  // Render usage reports
-  renderUsageReports(clientData);
-  
-  // Render billing (detailed)
-  renderBilling(clientData);
+  // Render billing tab content (same as overview)
+  renderBillingTabContent(clientData);
 }
 
 // Dashboard tabs functionality
@@ -2017,9 +2011,6 @@ function renderBillingSummary(clientData) {
           <span class="billing-detail-label">Next Billing:</span>
           <span class="billing-detail-value">${new Date(billing.nextBillingDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
         </div>
-      </div>
-      <div class="billing-summary-actions">
-        <a href="#tab-billing" class="btn" onclick="document.querySelector('[data-tab=\"billing\"]').click(); return false;">View Details</a>
       </div>
     </div>
   `;

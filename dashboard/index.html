@@ -66,8 +66,6 @@
       <section class="reveal" style="margin:32px 0;">
         <div class="dashboard-tabs">
           <button class="dashboard-tab active" data-tab="overview">📊 Overview</button>
-          <button class="dashboard-tab" data-tab="chats">💬 Chat Sessions</button>
-          <button class="dashboard-tab" data-tab="usage">📈 Usage Reports</button>
           <button class="dashboard-tab" data-tab="billing">💳 Billing</button>
         </div>
       </section>
@@ -106,44 +104,36 @@
         </section>
       </div>
 
-      <!-- Chat Sessions Tab -->
-      <div class="dashboard-tab-content" id="tab-chats">
-        <section class="reveal" style="margin:32px 0;">
-          <div class="section-head">
-            <h2>Chat Sessions</h2>
-            <p>View and manage customer chat conversations. Click on a session to view details or take over.</p>
-          </div>
-
-          <div class="chat-sessions-container" id="chat-sessions-container">
-            <!-- Chat sessions will be populated by JavaScript -->
-          </div>
-        </section>
-      </div>
-
-      <!-- Usage Reports Tab -->
-      <div class="dashboard-tab-content" id="tab-usage">
-        <section class="reveal" style="margin:32px 0;">
-          <div class="section-head">
-            <h2>Usage Reports</h2>
-            <p>Detailed analytics and metrics for your chatbot usage.</p>
-          </div>
-
-          <div class="usage-reports-container" id="usage-reports-container">
-            <!-- Usage reports will be populated by JavaScript -->
-          </div>
-        </section>
-      </div>
-
       <!-- Billing Tab -->
       <div class="dashboard-tab-content" id="tab-billing">
+        <!-- Billing Summary -->
         <section class="reveal" style="margin:32px 0;">
+          <div class="billing-summary-card" id="billing-summary-tab">
+            <!-- Billing summary will be populated by JavaScript -->
+          </div>
+        </section>
+
+        <!-- Your Assets/Products -->
+        <section class="reveal" style="margin:48px 0;">
           <div class="section-head">
-            <h2>Billing & Usage</h2>
-            <p>View your current usage, limits, and billing information.</p>
+            <h2>Your Assets</h2>
+            <p>Access and manage your products and services.</p>
           </div>
 
-          <div class="billing-container" id="billing-container">
-            <!-- Billing information will be populated by JavaScript -->
+          <div class="assets-grid" id="assets-container-tab">
+            <!-- Assets will be populated by JavaScript -->
+          </div>
+        </section>
+
+        <!-- Available Products (Upsell) -->
+        <section class="reveal" style="margin:48px 0;">
+          <div class="section-head">
+            <h2>Available Products</h2>
+            <p>Explore additional products and services to enhance your business.</p>
+          </div>
+
+          <div class="products-grid" id="products-container-tab">
+            <!-- Products will be populated by JavaScript -->
           </div>
         </section>
       </div>

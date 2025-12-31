@@ -1401,7 +1401,53 @@ const Auth = {
           totalServices: 3,
           completedProjects: 2,
           uptime: 99.9
-        }
+        },
+        assets: [
+          {
+            id: 'asset-001',
+            name: 'AI Chatbot',
+            description: 'Intelligent customer support chatbot with natural language processing',
+            icon: '🤖',
+            status: 'active',
+            loginUrl: 'https://chatbot.apextsgroup.com/login',
+            lastActive: '2024-03-28T14:30:00'
+          },
+          {
+            id: 'asset-002',
+            name: 'AI Data Cleaner',
+            description: 'Automated data cleaning and validation tool',
+            icon: '🧹',
+            status: 'active',
+            loginUrl: 'https://datacleaner.apextsgroup.com/login',
+            lastActive: '2024-03-27T10:15:00'
+          }
+        ],
+        availableProducts: [
+          {
+            id: 'prod-001',
+            name: 'AI Content Generator',
+            description: 'Generate high-quality content automatically using AI',
+            icon: '✍️',
+            price: '$79/month',
+            features: ['Unlimited content generation', 'Multiple formats', 'SEO optimization']
+          },
+          {
+            id: 'prod-002',
+            name: 'Analytics Dashboard',
+            description: 'Advanced analytics and reporting for all your assets',
+            icon: '📊',
+            price: '$49/month',
+            features: ['Real-time metrics', 'Custom reports', 'Data export']
+          },
+          {
+            id: 'prod-003',
+            name: 'API Integration Suite',
+            description: 'Connect all your tools with powerful API integrations',
+            icon: '🔌',
+            price: '$99/month',
+            features: ['Unlimited integrations', 'Webhook support', 'Custom endpoints']
+          }
+        ]
       },
       'client-002': {
         name: 'John Smith',
@@ -1472,7 +1518,52 @@ const Auth = {
           totalServices: 1,
           completedProjects: 0,
           uptime: 100
-        }
+        },
+        assets: [
+          {
+            id: 'asset-003',
+            name: 'AI Chatbot',
+            description: 'Intelligent customer support chatbot',
+            icon: '🤖',
+            status: 'active',
+            loginUrl: 'https://chatbot.apextsgroup.com/login',
+            lastActive: '2024-03-28T16:20:00'
+          }
+        ],
+        availableProducts: [
+          {
+            id: 'prod-001',
+            name: 'AI Data Cleaner',
+            description: 'Automated data cleaning and validation tool',
+            icon: '🧹',
+            price: '$59/month',
+            features: ['Data validation', 'Duplicate removal', 'Format standardization']
+          },
+          {
+            id: 'prod-002',
+            name: 'AI Content Generator',
+            description: 'Generate high-quality content automatically using AI',
+            icon: '✍️',
+            price: '$79/month',
+            features: ['Unlimited content generation', 'Multiple formats', 'SEO optimization']
+          },
+          {
+            id: 'prod-003',
+            name: 'Analytics Dashboard',
+            description: 'Advanced analytics and reporting for all your assets',
+            icon: '📊',
+            price: '$49/month',
+            features: ['Real-time metrics', 'Custom reports', 'Data export']
+          },
+          {
+            id: 'prod-004',
+            name: 'API Integration Suite',
+            description: 'Connect all your tools with powerful API integrations',
+            icon: '🔌',
+            price: '$99/month',
+            features: ['Unlimited integrations', 'Webhook support', 'Custom endpoints']
+          }
+        ]
       }
     };
     
@@ -1490,6 +1581,67 @@ const Auth = {
     if (!client.chatSessions) {
       client.chatSessions = [];
     }
+    if (!client.assets) {
+      client.assets = [];
+    }
+    // Master list of all available products
+    const allAvailableProducts = [
+      {
+        id: 'prod-001',
+        name: 'AI Data Cleaner',
+        description: 'Automated data cleaning and validation tool',
+        icon: '🧹',
+        price: '$59/month',
+        features: ['Data validation', 'Duplicate removal', 'Format standardization']
+      },
+      {
+        id: 'prod-002',
+        name: 'AI Content Generator',
+        description: 'Generate high-quality content automatically using AI',
+        icon: '✍️',
+        price: '$79/month',
+        features: ['Unlimited content generation', 'Multiple formats', 'SEO optimization']
+      },
+      {
+        id: 'prod-003',
+        name: 'Analytics Dashboard',
+        description: 'Advanced analytics and reporting for all your assets',
+        icon: '📊',
+        price: '$49/month',
+        features: ['Real-time metrics', 'Custom reports', 'Data export']
+      },
+      {
+        id: 'prod-004',
+        name: 'API Integration Suite',
+        description: 'Connect all your tools with powerful API integrations',
+        icon: '🔌',
+        price: '$99/month',
+        features: ['Unlimited integrations', 'Webhook support', 'Custom endpoints']
+      },
+      {
+        id: 'prod-005',
+        name: 'AI Chatbot',
+        description: 'Intelligent customer support chatbot with natural language processing',
+        icon: '🤖',
+        price: '$99/month',
+        features: ['24/7 support', 'Natural language processing', 'Custom training']
+      }
+    ];
+    
+    // If client has custom availableProducts, use those; otherwise filter from master list
+    if (!client.availableProducts) {
+      // Filter out products the client already has
+      const assetNames = (client.assets || []).map(a => a.name.toLowerCase());
+      client.availableProducts = allAvailableProducts.filter(p => 
+        !assetNames.includes(p.name.toLowerCase())
+      );
+    } else {
+      // If client has custom list, still filter out what they already have
+      const assetNames = (client.assets || []).map(a => a.name.toLowerCase());
+      client.availableProducts = client.availableProducts.filter(p => 
+        !assetNames.includes(p.name.toLowerCase())
+      );
+    }
     
     return client;
   }
@@ -1505,17 +1657,18 @@ function updateNavigation() {
   const isLoginPage = currentPath.includes('/login/');
   const isDashboardPage = currentPath.includes('/dashboard/');
 
-  // Remove existing login/dashboard link
-  const existingLink = nav.querySelector('a[href="/login/"], a[href="/dashboard/"]');
+  // Remove existing login/dashboard link or button
+  const existingLink = nav.querySelector('a[href="/login/"], a[href="/dashboard/"], button.nav-portal-btn');
   if (existingLink) {
     existingLink.remove();
   }
 
-  // Add appropriate link
+  // Add appropriate button
   if (isLoggedIn && !isDashboardPage) {
     const dashboardLink = document.createElement('a');
     dashboardLink.href = '/dashboard/';
-    dashboardLink.textContent = 'Dashboard';
+    dashboardLink.className = 'nav-portal-btn btn primary';
+    dashboardLink.textContent = 'Client Portal';
     if (isDashboardPage) {
       dashboardLink.classList.add('active');
     }
@@ -1523,7 +1676,8 @@ function updateNavigation() {
   } else if (!isLoggedIn && !isLoginPage) {
     const loginLink = document.createElement('a');
     loginLink.href = '/login/';
-    loginLink.textContent = 'Client Login';
+    loginLink.className = 'nav-portal-btn btn primary';
+    loginLink.textContent = 'Client Portal';
     nav.appendChild(loginLink);
   }
 }
@@ -1609,74 +1763,17 @@ function initDashboard() {
     clientNameEl.textContent = clientData.name;
   }
 
-  // Update stats
-  const totalServicesEl = document.getElementById('total-services');
-  const completedProjectsEl = document.getElementById('completed-projects');
-  const uptimePercentEl = document.getElementById('uptime-percent');
-  const lastUpdateEl = document.getElementById('last-update');
-
-  if (totalServicesEl) totalServicesEl.textContent = clientData.stats.totalServices;
-  if (completedProjectsEl) completedProjectsEl.textContent = clientData.stats.completedProjects;
-  if (uptimePercentEl) uptimePercentEl.textContent = clientData.stats.uptime + '%';
-  if (lastUpdateEl) {
-    const today = new Date();
-    lastUpdateEl.textContent = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  }
-
-  // Render services
-  const servicesContainer = document.getElementById('services-container');
-  if (servicesContainer && clientData.services) {
-    servicesContainer.innerHTML = clientData.services.map(service => `
-      <div class="service-card">
-        <div class="service-header">
-          <div>
-            <h3 style="margin:0 0 4px;font-size:20px;">${service.name}</h3>
-            <p style="margin:0;color:var(--muted);font-size:14px;">${service.description}</p>
-          </div>
-          <span class="service-status status-${service.status}">${service.status === 'active' ? 'Active' : service.status === 'in-progress' ? 'In Progress' : 'Completed'}</span>
-        </div>
-        <div class="service-progress">
-          <div class="progress-bar">
-            <div class="progress-fill" style="width:${service.progress}%"></div>
-          </div>
-          <div class="service-meta">
-            <span>${service.progress}% Complete</span>
-            <span>Started: ${new Date(service.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-            <span>Last Update: ${new Date(service.lastUpdate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
-          </div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  // Render reports
-  const reportsContainer = document.getElementById('reports-container');
-  if (reportsContainer && clientData.reports) {
-    reportsContainer.innerHTML = clientData.reports.map(report => {
-      const typeIcons = {
-        performance: '📊',
-        analysis: '📈',
-        security: '🔒',
-        status: '📋'
-      };
-      return `
-        <div class="report-card">
-          <div class="report-icon">${typeIcons[report.type] || '📄'}</div>
-          <div class="report-content">
-            <h3 style="margin:0 0 8px;font-size:18px;">${report.title}</h3>
-            <p style="margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.6;">${report.summary}</p>
-            <div class="report-meta">
-              <span>${new Date(report.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-              <a href="/contact/" class="report-link">View Details →</a>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
   // Initialize tabs
   initDashboardTabs();
+  
+  // Render billing summary
+  renderBillingSummary(clientData);
+  
+  // Render assets
+  renderAssets(clientData);
+  
+  // Render available products
+  renderAvailableProducts(clientData);
   
   // Render chat sessions
   renderChatSessions(clientData);
@@ -1684,7 +1781,7 @@ function initDashboard() {
   // Render usage reports
   renderUsageReports(clientData);
   
-  // Render billing
+  // Render billing (detailed)
   renderBilling(clientData);
 }
 
@@ -1885,6 +1982,131 @@ function renderUsageReports(clientData) {
       </div>
     </div>
   `;
+}
+
+// Render billing summary (for overview tab)
+function renderBillingSummary(clientData) {
+  const container = document.getElementById('billing-summary');
+  if (!container || !clientData.billing || !clientData.plan) return;
+  
+  const billing = clientData.billing;
+  const plan = clientData.plan;
+  const usage = clientData.usage || { currentMonth: 0 };
+  const usagePercent = ((usage.currentMonth / plan.monthlyLimit) * 100).toFixed(1);
+  const isOverLimit = usage.currentMonth > plan.monthlyLimit;
+  
+  container.innerHTML = `
+    <div class="billing-summary-content">
+      <div class="billing-summary-main">
+        <div class="billing-summary-icon">💳</div>
+        <div class="billing-summary-info">
+          <h3 style="margin:0 0 4px;font-size:24px;">Current Bill: $${billing.currentBill.toFixed(2)}</h3>
+          <p style="margin:0;color:var(--muted);font-size:14px;">
+            ${plan.name} Plan - Base: $${billing.basePrice.toFixed(2)}${billing.overageCost > 0 ? ` + Overage: $${billing.overageCost.toFixed(2)}` : ''}
+          </p>
+        </div>
+      </div>
+      <div class="billing-summary-details">
+        <div class="billing-detail-item">
+          <span class="billing-detail-label">Usage:</span>
+          <span class="billing-detail-value ${isOverLimit ? 'over-limit' : ''}">
+            ${usage.currentMonth.toLocaleString()} / ${plan.monthlyLimit.toLocaleString()} (${usagePercent}%)
+          </span>
+        </div>
+        <div class="billing-detail-item">
+          <span class="billing-detail-label">Next Billing:</span>
+          <span class="billing-detail-value">${new Date(billing.nextBillingDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+        </div>
+      </div>
+      <div class="billing-summary-actions">
+        <a href="#tab-billing" class="btn" onclick="document.querySelector('[data-tab=\"billing\"]').click(); return false;">View Details</a>
+      </div>
+    </div>
+  `;
+}
+
+// Render client assets/products
+function renderAssets(clientData) {
+  const container = document.getElementById('assets-container');
+  if (!container) return;
+  
+  const assets = clientData.assets || [];
+  
+  if (assets.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">📦</div>
+        <h3 style="margin:16px 0 8px;font-size:20px;">No Assets Yet</h3>
+        <p style="margin:0;color:var(--muted);">You don't have any active assets. Check out our available products below!</p>
+      </div>
+    `;
+    return;
+  }
+  
+  container.innerHTML = assets.map(asset => {
+    const lastActive = asset.lastActive ? new Date(asset.lastActive).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : 'Never';
+    return `
+      <div class="asset-card">
+        <div class="asset-header">
+          <div class="asset-icon">${asset.icon}</div>
+          <div class="asset-info">
+            <h3 style="margin:0 0 4px;font-size:20px;">${asset.name}</h3>
+            <p style="margin:0;color:var(--muted);font-size:14px;">${asset.description}</p>
+          </div>
+          <span class="asset-status status-${asset.status}">${asset.status === 'active' ? 'Active' : 'Inactive'}</span>
+        </div>
+        <div class="asset-meta">
+          <span style="color:var(--muted);font-size:13px;">Last Active: ${lastActive}</span>
+        </div>
+        <div class="asset-actions">
+          <a href="${asset.loginUrl}" target="_blank" class="btn primary" style="width:100%;">Access Product →</a>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Render available products (upsell section)
+function renderAvailableProducts(clientData) {
+  const container = document.getElementById('products-container');
+  if (!container) return;
+  
+  const products = clientData.availableProducts || [];
+  
+  if (products.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">✨</div>
+        <h3 style="margin:16px 0 8px;font-size:20px;">You Have All Products!</h3>
+        <p style="margin:0;color:var(--muted);">You're already using all available products. We'll notify you when new products are released!</p>
+      </div>
+    `;
+    return;
+  }
+  
+  container.innerHTML = products.map(product => {
+    const featuresList = product.features.map(f => `<li>${f}</li>`).join('');
+    return `
+      <div class="product-card">
+        <div class="product-header">
+          <div class="product-icon">${product.icon}</div>
+          <div class="product-info">
+            <h3 style="margin:0 0 4px;font-size:20px;">${product.name}</h3>
+            <p style="margin:0 0 12px;color:var(--muted);font-size:14px;">${product.description}</p>
+            <div class="product-price">${product.price}</div>
+          </div>
+        </div>
+        <div class="product-features">
+          <ul style="margin:0;padding-left:20px;color:var(--muted);font-size:14px;line-height:1.8;">
+            ${featuresList}
+          </ul>
+        </div>
+        <div class="product-actions">
+          <a href="/contact/" class="btn primary" style="width:100%;">Add Product →</a>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 // Render billing information

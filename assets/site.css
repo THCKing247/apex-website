@@ -193,6 +193,10 @@ main{margin-top:16px;border:1px solid var(--border);border-radius:var(--radius);
 .nav a.active::before{
   opacity:1;
 }
+.nav .nav-portal-btn{
+  margin-left:8px;
+  white-space:nowrap;
+}
 
 /* HERO */
 .hero{text-align:center}
@@ -2800,6 +2804,220 @@ html{
   text-decoration:underline;
 }
 
+/* Billing Summary */
+.billing-summary-card{
+  background:var(--card);
+  border:2px solid var(--border);
+  border-radius:var(--radius);
+  padding:32px;
+  margin-bottom:32px;
+}
+.billing-summary-content{
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+.billing-summary-main{
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+.billing-summary-icon{
+  font-size:48px;
+  line-height:1;
+}
+.billing-summary-info{
+  flex:1;
+}
+.billing-summary-details{
+  display:flex;
+  gap:32px;
+  flex-wrap:wrap;
+  padding:20px;
+  background:rgba(0,0,0,.2);
+  border-radius:12px;
+}
+.billing-detail-item{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.billing-detail-label{
+  font-size:13px;
+  color:var(--muted);
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+.billing-detail-value{
+  font-size:16px;
+  font-weight:700;
+  color:var(--text);
+}
+.billing-detail-value.over-limit{
+  color:#fca5a5;
+}
+.billing-summary-actions{
+  display:flex;
+  gap:12px;
+}
+
+/* Assets Grid */
+.assets-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:24px;
+  margin-top:24px;
+}
+.asset-card{
+  background:var(--card);
+  border:2px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px;
+  transition:all .3s ease;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.asset-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(124,58,237,.2);
+  border-color:rgba(124,58,237,.3);
+}
+.asset-header{
+  display:flex;
+  align-items:flex-start;
+  gap:16px;
+}
+.asset-icon{
+  font-size:40px;
+  line-height:1;
+  flex-shrink:0;
+}
+.asset-info{
+  flex:1;
+}
+.asset-status{
+  padding:6px 12px;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  white-space:nowrap;
+}
+.asset-status.status-active{
+  background:rgba(34,197,94,.2);
+  color:#86efac;
+  border:1px solid rgba(34,197,94,.3);
+}
+.asset-status.status-inactive{
+  background:rgba(107,114,128,.2);
+  color:#d1d5db;
+  border:1px solid rgba(107,114,128,.3);
+}
+.asset-meta{
+  padding-top:12px;
+  border-top:1px solid var(--border);
+}
+.asset-actions{
+  margin-top:auto;
+}
+
+/* Products Grid (Upsell) */
+.products-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:24px;
+  margin-top:24px;
+}
+.product-card{
+  background:var(--card);
+  border:2px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px;
+  transition:all .3s ease;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  position:relative;
+  overflow:hidden;
+}
+.product-card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:4px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  opacity:.5;
+}
+.product-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(124,58,237,.2);
+  border-color:rgba(124,58,237,.3);
+}
+.product-header{
+  display:flex;
+  align-items:flex-start;
+  gap:16px;
+}
+.product-icon{
+  font-size:40px;
+  line-height:1;
+  flex-shrink:0;
+}
+.product-info{
+  flex:1;
+}
+.product-price{
+  font-size:24px;
+  font-weight:700;
+  color:var(--accent);
+  margin-top:8px;
+}
+.product-features{
+  padding:16px;
+  background:rgba(0,0,0,.1);
+  border-radius:12px;
+  flex:1;
+}
+.product-features ul{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+.product-features li{
+  position:relative;
+  padding-left:20px;
+}
+.product-features li::before{
+  content:"✓";
+  position:absolute;
+  left:0;
+  color:var(--accent);
+  font-weight:700;
+}
+.product-actions{
+  margin-top:auto;
+}
+
+/* Empty State */
+.empty-state{
+  text-align:center;
+  padding:64px 32px;
+  background:var(--card);
+  border:2px dashed var(--border);
+  border-radius:var(--radius);
+}
+.empty-state-icon{
+  font-size:64px;
+  line-height:1;
+  margin-bottom:16px;
+  opacity:.5;
+}
+
 /* Responsive */
 @media(max-width:768px){
   .login-card{
@@ -2827,5 +3045,21 @@ html{
     flex-direction:column;
     align-items:flex-start;
     gap:8px;
+  }
+  .billing-summary-main{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+  .billing-summary-details{
+    flex-direction:column;
+    gap:16px;
+  }
+  .assets-grid,
+  .products-grid{
+    grid-template-columns:1fr;
+  }
+  .asset-header,
+  .product-header{
+    flex-direction:column;
   }
 }

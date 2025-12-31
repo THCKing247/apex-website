@@ -5,8 +5,8 @@
      crossorigin="anonymous"></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Client Dashboard | Apex Technical Solutions Group LLC</title>
-  <meta name="description" content="View your services and reports in your client dashboard." />
+  <title>Client Portal | Apex Technical Solutions Group LLC</title>
+  <meta name="description" content="Access your assets, view billing information, and manage your account." />
   <link rel="canonical" href="https://apextsgroup.com/dashboard/" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://apextsgroup.com/dashboard/" />
@@ -74,61 +74,34 @@
 
       <!-- Overview Tab -->
       <div class="dashboard-tab-content active" id="tab-overview">
-        <!-- Quick Stats -->
+        <!-- Billing Summary -->
         <section class="reveal" style="margin:32px 0;">
-          <div class="dashboard-stats">
-            <div class="stat-card">
-              <div class="stat-icon">📊</div>
-              <div class="stat-content">
-                <div class="stat-value" id="total-services">0</div>
-                <div class="stat-label">Active Services</div>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon">✅</div>
-              <div class="stat-content">
-                <div class="stat-value" id="completed-projects">0</div>
-                <div class="stat-label">Completed Projects</div>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon">📈</div>
-              <div class="stat-content">
-                <div class="stat-value" id="uptime-percent">100%</div>
-                <div class="stat-label">System Uptime</div>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon">📅</div>
-              <div class="stat-content">
-                <div class="stat-value" id="last-update">Today</div>
-                <div class="stat-label">Last Update</div>
-              </div>
-            </div>
+          <div class="billing-summary-card" id="billing-summary">
+            <!-- Billing summary will be populated by JavaScript -->
           </div>
         </section>
 
-        <!-- Active Services -->
+        <!-- Your Assets/Products -->
         <section class="reveal" style="margin:48px 0;">
           <div class="section-head">
-            <h2>Your Services</h2>
-            <p>Overview of all active services and their current status.</p>
+            <h2>Your Assets</h2>
+            <p>Access and manage your products and services.</p>
           </div>
 
-          <div class="services-grid" id="services-container">
-            <!-- Services will be populated by JavaScript -->
+          <div class="assets-grid" id="assets-container">
+            <!-- Assets will be populated by JavaScript -->
           </div>
         </section>
 
-        <!-- Reports -->
+        <!-- Available Products (Upsell) -->
         <section class="reveal" style="margin:48px 0;">
           <div class="section-head">
-            <h2>Recent Reports</h2>
-            <p>Summarized reports and analytics for your services.</p>
+            <h2>Available Products</h2>
+            <p>Explore additional products and services to enhance your business.</p>
           </div>
 
-          <div class="reports-grid" id="reports-container">
-            <!-- Reports will be populated by JavaScript -->
+          <div class="products-grid" id="products-container">
+            <!-- Products will be populated by JavaScript -->
           </div>
         </section>
       </div>

@@ -242,43 +242,45 @@
       </footer>
       
       <!-- Chatbot Widget -->
-      <div class="chatbot-widget" id="chatbotWidget">
+      <div class="chatbot-widget" id="chatbotWidget" role="dialog" aria-labelledby="chatbot-name" aria-modal="true" aria-hidden="true">
         <div class="chatbot-header" id="chatbotHeader">
           <div class="chatbot-header-content">
-            <div class="chatbot-avatar">🤖</div>
+            <div class="chatbot-avatar" aria-hidden="true">🤖</div>
             <div>
-              <div class="chatbot-name">Apex Assistant</div>
-              <div class="chatbot-status">Online</div>
+              <div class="chatbot-name" id="chatbot-name">Apex Assistant</div>
+              <div class="chatbot-status" id="chatbot-status" aria-live="polite" aria-atomic="true">Online</div>
             </div>
           </div>
           <button class="chatbot-close" id="chatbotClose" aria-label="Close chat">×</button>
         </div>
-        <div class="chatbot-messages" id="chatbotMessages">
+        <div class="chatbot-messages" id="chatbotMessages" role="log" aria-live="polite" aria-atomic="false" aria-label="Chat messages">
           <div class="chatbot-message bot-message">
             <div class="message-content">
               <p>Hi! I'm here to help you with any questions about our services, pricing, or how we can help your business. What would you like to know?</p>
             </div>
           </div>
         </div>
-        <div class="chatbot-quick-replies" id="chatbotQuickReplies">
-          <button class="quick-reply-btn" data-question="What services do you offer?">Services</button>
-          <button class="quick-reply-btn" data-question="How much do projects cost?">Pricing</button>
-          <button class="quick-reply-btn" data-question="How long do projects take?">Timeline</button>
-          <button class="quick-reply-btn" data-question="How can I contact you?">Contact</button>
+        <div class="chatbot-quick-replies" id="chatbotQuickReplies" role="group" aria-label="Quick reply options">
+          <button class="quick-reply-btn" data-question="What services do you offer?" aria-label="Ask about services">Services</button>
+          <button class="quick-reply-btn" data-question="How much do projects cost?" aria-label="Ask about pricing">Pricing</button>
+          <button class="quick-reply-btn" data-question="How long do projects take?" aria-label="Ask about timeline">Timeline</button>
+          <button class="quick-reply-btn" data-question="How can I contact you?" aria-label="Ask about contact">Contact</button>
         </div>
         <div class="chatbot-input-container">
+          <label for="chatbotInput" class="sr-only">Type your message</label>
           <input 
             type="text" 
             class="chatbot-input" 
             id="chatbotInput" 
             placeholder="Type your question..."
             aria-label="Chat input"
+            aria-describedby="chatbot-status"
           >
           <button class="chatbot-send" id="chatbotSend" aria-label="Send message">➤</button>
         </div>
       </div>
-      <button class="chatbot-toggle" id="chatbotToggle" aria-label="Open chat">
-        <span class="chatbot-toggle-icon">💬</span>
+      <button class="chatbot-toggle" id="chatbotToggle" aria-label="Open chat" aria-expanded="false" aria-controls="chatbotWidget">
+        <span class="chatbot-toggle-icon" aria-hidden="true">💬</span>
         <span class="chatbot-toggle-text">Need Help?</span>
       </button>
       

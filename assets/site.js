@@ -1081,6 +1081,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (saved === "true" && chatbotWidget && chatbotToggle) {
       chatbotWidget.classList.add("open");
       chatbotToggle.classList.add("hidden");
+      chatbotWidget.setAttribute("aria-hidden", "false");
+      chatbotToggle.setAttribute("aria-expanded", "true");
+    } else if (chatbotWidget && chatbotToggle) {
+      chatbotWidget.setAttribute("aria-hidden", "true");
+      chatbotToggle.setAttribute("aria-expanded", "false");
     }
   }
 
@@ -1089,6 +1094,8 @@ document.addEventListener("DOMContentLoaded", () => {
     chatbotToggle.addEventListener("click", () => {
       chatbotWidget.classList.add("open");
       chatbotToggle.classList.add("hidden");
+      chatbotWidget.setAttribute("aria-hidden", "false");
+      chatbotToggle.setAttribute("aria-expanded", "true");
       chatbotInput.focus();
       saveChatbotState(true);
     });
@@ -1099,7 +1106,24 @@ document.addEventListener("DOMContentLoaded", () => {
     chatbotClose.addEventListener("click", () => {
       chatbotWidget.classList.remove("open");
       chatbotToggle.classList.remove("hidden");
+      chatbotWidget.setAttribute("aria-hidden", "true");
+      chatbotToggle.setAttribute("aria-expanded", "false");
+      chatbotToggle.focus();
       saveChatbotState(false);
+    });
+  }
+
+  // Close chatbot on Escape key
+  if (chatbotWidget) {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && chatbotWidget.classList.contains("open")) {
+        chatbotWidget.classList.remove("open");
+        chatbotToggle.classList.remove("hidden");
+        chatbotWidget.setAttribute("aria-hidden", "true");
+        chatbotToggle.setAttribute("aria-expanded", "false");
+        chatbotToggle.focus();
+        saveChatbotState(false);
+      }
     });
   }
 

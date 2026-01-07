@@ -1798,7 +1798,7 @@ function updateNavigation() {
   // Add appropriate button
   if (isLoggedIn && !isDashboardPage) {
     const dashboardLink = document.createElement('a');
-    dashboardLink.href = '/dashboard/';
+    dashboardLink.href = 'https://portal.apextsgroup.com';
     dashboardLink.className = 'nav-portal-btn btn primary';
     dashboardLink.textContent = 'Client Portal';
     if (isDashboardPage) {
@@ -1807,7 +1807,7 @@ function updateNavigation() {
     nav.appendChild(dashboardLink);
   } else if (!isLoggedIn && !isLoginPage) {
     const loginLink = document.createElement('a');
-    loginLink.href = '/login/';
+    loginLink.href = 'https://portal.apextsgroup.com';
     loginLink.className = 'nav-portal-btn btn primary';
     loginLink.textContent = 'Client Portal';
     nav.appendChild(loginLink);
